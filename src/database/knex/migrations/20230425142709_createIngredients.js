@@ -1,7 +1,7 @@
 export function up(knex) {
   return knex.schema.createTable("ingredients", (table) => {
     table.increments("id");
-    table.integer("dish_id").references("id").inTable("dishes");
+    table.integer("dish_id").references("id").inTable("dishes").onDelete("CASCADE");
     table.text("name");
   });
 }
