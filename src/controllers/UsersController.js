@@ -26,15 +26,15 @@ export class UsersController {
 
   async update(req, res) {
     const { name, email, password, old_password } = req.body;
-    const { id } = req.params;
+    const user_id = req.user.id;
 
-    const [user] = await knex("users").where({ id });
+    const user = await knex("users").where({ id: user_id }).first();
 
     if (!user) {
       throw new AppError("Este usuário não existe!");
     }
 
-    const [userWithUpdatedEmail] = await knex("users").where({ email });
+    const userWithUpdatedEmail = await knex("users").where({ email }).first();
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
       throw new AppError("Este e-mail já está cadastrado!");
@@ -57,7 +57,7 @@ export class UsersController {
       user.password = await hash(password, 8);
     }
 
-    await knex("users").update({
+    await knex("users").where({ id: user_id }).update({
       name,
       email,
       password: user.password,
