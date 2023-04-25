@@ -1,9 +1,11 @@
 import "express-async-errors";
 import express from "express";
+import database from "./database/sqlite/index.js";
 import { routes } from "./routes/index.js";
 import { AppError } from "./utils/AppError.js";
 
 const app = express();
+database();
 
 app.use(express.json());
 app.use(routes);
